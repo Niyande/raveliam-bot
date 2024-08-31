@@ -80,6 +80,7 @@ module.exports = {
                             { name: 'Strażnik', value: 'straznik' },
                             { name: 'Starszy Strażnik', value: 's-straznik' },
                             { name: 'Czempion', value: 'czempion' },
+                            { name: 'Dziecko', value: 'dziecko'},
                         )
                 )
         )
@@ -171,6 +172,9 @@ module.exports = {
                     case 'czempion':
                         var old_rank = 'Czempion';
                         break;
+                    case 'dziecko':
+                        var old_rank = 'Dziecko';
+                        break;
                 }
                 switch (new_rank){
                     case 'rekrut':
@@ -187,6 +191,9 @@ module.exports = {
                         break;
                     case 'czempion':
                         var new_rank_display = 'Czempion';
+                        break;
+                    case 'dziecko':
+                        var new_rank_display = 'Dziecko';
                         break;
                 }
                 character[0].rank = new_rank;

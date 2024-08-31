@@ -72,6 +72,7 @@ module.exports = {
                 delete character[0].powalenie;
                 delete character[0].krok_w_tyl;
                 delete character[0].riposta;
+                delete character[0].kac;
                 message += '[1;32m' + character[0].name + '[1;37m, ';
             }
             message = message.slice(0, -2) + ' zresetowani\n```';

@@ -23,6 +23,7 @@ module.exports = {
                     { name: 'Strażnik', value: 'straznik' },
                     { name: 'Starszy Strażnik', value: 's-straznik' },
                     { name: 'Czempion', value: 'czempion' },
+                    { name: 'Dziecko', value: 'dziecko'},
                 )
         )
         .addNumberOption(option =>
@@ -190,6 +191,9 @@ module.exports = {
                     break;
                 case 'czempion':
                     var rank_display = 'Czempion';
+                    break;
+                case 'dziecko':
+                    var rank_display = 'Dziecko';
                     break;
             }
             var message = 'Zapisano:\n```ansi\n[1;2m[1;37m[1;32m' + name + '[0m[1;37m' +

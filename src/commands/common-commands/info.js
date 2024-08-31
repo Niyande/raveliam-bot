@@ -49,6 +49,9 @@ module.exports = {
                 return;
             }
             switch (enemy[0].rank){
+                case 'dziecko':
+                    var rank_display = 'Dziecko';
+                    break;
                 case 'rekrut':
                     var rank_display = 'Rekrut';
                     break;
@@ -294,6 +297,10 @@ module.exports = {
                 else message4 += ' tur\n';
                 has_effects += 1;
             }
+            if(Object.hasOwn(enemy[0],'root')){
+                message4 += '[1;37mUnieruchomienie\n'
+                has_effects += 1;
+            }
             if(Object.hasOwn(enemy[0],'powalenie')){
                 message4 += '[1;37mPowalenie\n'
                 has_effects += 1;
@@ -331,6 +338,9 @@ module.exports = {
 
         } else {
             switch (character[0].rank){
+                case 'dziecko':
+                    var rank_display = 'Dziecko';
+                    break;
                 case 'rekrut':
                     var rank_display = 'Rekrut';
                     break;
@@ -564,6 +574,10 @@ module.exports = {
                 if(character[0].stun === 1) message4 += ' tura\n';
                 else if(character[0].stun < 5) message4 += ' tury\n';
                 else message4 += ' tur\n';
+                has_effects += 1;
+            }
+            if(Object.hasOwn(character[0],'root')){
+                message4 += '[1;37mUnieruchomienie\n'
                 has_effects += 1;
             }
             if(Object.hasOwn(character[0],'powalenie')){

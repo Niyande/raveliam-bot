@@ -23,6 +23,7 @@ module.exports = {
                     { name:'trucizna', value:'poison'},
                     { name:'klątwa', value:'curse' },
                     { name:'ogłuszenie', value:'stun' },
+                    { name:'unieruchomienie', value:'root' },
                     { name:'powalenie', value:'powalenie' },
                     { name:'krok w tył', value:'krok_w_tyl' },
                     { name:'riposta', value:'riposta' },
@@ -86,6 +87,9 @@ module.exports = {
                 break;
             case 'stun':
                 var effect_display = 'ogłuszenie';
+                break;
+            case 'root':
+                var effect_display = 'unieruchomienie';
                 break;
             case 'powalenie':
                 var effect_display = 'powalenie';

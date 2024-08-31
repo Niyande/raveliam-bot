@@ -84,6 +84,10 @@ module.exports = {
             return
         }
         switch (character[0].rank){
+            case 'dziecko':
+                var rank_display = 'Dziecko';
+                character[0].rank = 'dziecko';
+                break;
             case 'rekrut':
                 var rank_display = 'Młodszy Strażnik';
                 character[0].rank = 'm-straznik';

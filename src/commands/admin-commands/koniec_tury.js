@@ -64,7 +64,7 @@ module.exports = {
             }
             if(Object.hasOwn(character[0],'curse')){
                 message += '[1;34mklątwa: -' + character[0].curse + ' ';
-                character[0].hp -= character[0].curse;
+                character[0].mana -= character[0].curse;
             }
             if(Object.hasOwn(character[0],'stun')){
                 character[0].stun -= 1;
@@ -77,6 +77,9 @@ module.exports = {
                     if(character[0].stun === 1) message += ' tura ';
                     else message += ' tury ';
                 }
+            }
+            if(Object.hasOwn(character[0],'root')){
+                message += '[1;37mUnieruchomienie';
             }
             if(Object.hasOwn(character[0],'powalenie')){
                 character[0].powalenie -= 1;

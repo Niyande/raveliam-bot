@@ -68,6 +68,9 @@ module.exports = {
         }
 
         switch (character[0].rank){
+            case 'dziecko':
+                var dice = 15;
+                break;
             case 'rekrut':
                 var dice = 20;
                 break;

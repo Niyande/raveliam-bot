@@ -4,3 +4,4 @@ utility
 node_modules
 src/config.json
 database.json
+*copy.js
