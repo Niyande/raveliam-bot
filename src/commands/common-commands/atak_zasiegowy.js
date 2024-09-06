@@ -296,6 +296,14 @@ module.exports = {
             interaction.editReply(message);
             return
         }
+        if(weapon[0].type === 'crossbow'){
+            if(eval('character[0].reload.' + weapon[0].name + ' < 1')){
+                var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma przeładowanej broni[1;37m ' + weapon[0].display_name + '![0m\n```'
+                interaction.editReply(message);
+                return
+            }
+            eval('character[0].reload.' + weapon[0].name + '= 0');
+        }
 
 
         if(!Object.hasOwn(character[0].ammo[0],ammo_type)){

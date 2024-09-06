@@ -1234,7 +1234,7 @@ module.exports = {
                     if(enemy[0].stun === 1) message += ' turę';
                     else message += ' tury';
                 }
-                message += '\n```'
+                message += '\n```';
 
                 break;
             case 'krok_w_tyl':
@@ -4340,6 +4340,9 @@ module.exports = {
                 if(Object.hasOwn(character[0],'modifier_precyzja')){
                     stat_value += character[0].modifier_precyzja;
                 }
+                if(Object.hasOwn(character[0],'kac')){
+                    stat_value -= character[0].kac;
+                }
                 if(interaction.options.get('modyfikator')){
                     var modifier = interaction.options.get('modyfikator').value;
                     stat_value += modifier;
@@ -4366,6 +4369,14 @@ module.exports = {
                     interaction.editReply(message);
                     return
                 }
+                
+                if(eval('character[0].reload.' + weapon[0].name + ' < 1')){
+                    var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma przeładowanej broni[1;37m ' + weapon[0].display_name + '![0m\n```'
+                    interaction.editReply(message);
+                    return
+                }
+                eval('character[0].reload.' + weapon[0].name + '= 0');
+
                 if(!Object.hasOwn(character[0].ammo[0],'bolts')){
                     var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma [1;37mtej amunicji![0m\n```';
                     await interaction.editReply(message);
@@ -4531,6 +4542,9 @@ module.exports = {
                 var stat_value = character[0].precyzja;
                 if(Object.hasOwn(character[0],'modifier_precyzja')){
                     stat_value += character[0].modifier_precyzja;
+                }
+                if(Object.hasOwn(character[0],'kac')){
+                    stat_value -= character[0].kac;
                 }
                 if(interaction.options.get('modyfikator')){
                     var modifier = interaction.options.get('modyfikator').value;
