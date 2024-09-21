@@ -65,6 +65,11 @@ module.exports = {
                 character[0].hp = character[0].max_hp;
                 character[0].mana = character[0].max_mana;
                 character[0].energy = character[0].max_energy;
+
+                for(body_part of character[0].body_parts){
+                    eval('character[0].' + body_part + '= character[0].max_' + body_part);
+                }
+
                 delete character[0].bleeding;
                 delete character[0].poison;
                 delete character[0].curse;
@@ -81,10 +86,20 @@ module.exports = {
             character[0].hp = character[0].max_hp;
             character[0].mana = character[0].max_mana;
             character[0].energy = character[0].max_energy;
+
+            for(body_part of character[0].body_parts){
+                eval('character[0].' + body_part + '= character[0].max_' + body_part);
+            }
+            
             delete character[0].bleeding;
             delete character[0].poison;
             delete character[0].curse;
-            var message = '```ansi\n[1;32m' + name + '[1;37m zresetowanx[0m\n```'
+            delete character[0].stun;
+            delete character[0].powalenie;
+            delete character[0].krok_w_tyl;
+            delete character[0].riposta;
+            delete character[0].kac;
+            var message = '```ansi\n[1;32m' + name + '[1;37m zresetowany/a[0m\n```'
         }
         
         globals.SaveFile(JSON.stringify(database));

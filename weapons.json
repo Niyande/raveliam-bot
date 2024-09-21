@@ -12,7 +12,7 @@
 {"name":"miecz_dwureczny","display_name":"🗡️ Miecz dwuręczny","type":"melee","damage":12,"unarmored_damage":16},
 {"name":"topor_dwureczny","display_name":"🗡️ Ciężki topór dwuręczny","type":"melee","damage":12,"unarmored_damage":18},
 {"name":"proca","display_name":"🏹 Proca","type":"proca","damage":4,"ammo_type":"proca"},
-{"name":"noze_do_rzucania","display_name":"🏹 Noże do rzucania","type":"noze","damage":10,"ammo_type":"noze"},
+{"name":"noze_do_rzucania","display_name":"🏹 Noże do rzucania","type":"throwing_knifes","damage":10,"ammo_type":"noze"},
 {"name":"kamienie","display_name":"🏹 Siata z kamieniami","type":"ranged","damage":2,"ammo_type":"kamienie"},
 {"name":"luk_krotki","display_name":"🏹 Łuk krótki","type":"bow","damage":8,"ammo_type":"luk"},
 {"name":"luk_refleksyjny","display_name":"🏹 Łuk refleksyjny","type":"bow","damage":10,"ammo_type":"luk"},

@@ -103,6 +103,7 @@ module.exports = {
             database.enemies.push({
                 name: name,
                 rank: rank,
+                race: "Specjalna",
 
                 sila: sila,
                 zrecznosc: zrecznosc,

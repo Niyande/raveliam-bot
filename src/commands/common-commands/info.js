@@ -136,6 +136,16 @@ module.exports = {
                     message2_lines[j] += '[0m[2;37mObrażenia bez pancerza: [1;37m' + weapon[0].unarmored_damage.toString().padEnd(5, ' ');
                     j++;
                 }
+                if(weapon[0].type === 'crossbow'){
+                    message2_lines[j] += '[0m[2;37mPrzeładowana: [1;37m';
+                    if(eval('enemy[0].reload.' + weapon[0].name + ' < 1')) {
+                        message2_lines[j] += 'Nie            ';
+                    } else {
+                        message2_lines[j] += 'Tak            ';
+                    }
+                    j++;
+                }
+
                 if(weapon[0].type === 'ranged' || weapon[0].type === 'proca' || weapon[0].type === 'noze' || weapon[0].type === 'bow' || weapon[0].type === 'crossbow'){
                     message2_lines[j] += '[0m[2;37mAmunicja:                 ';
                     j++
@@ -225,7 +235,8 @@ module.exports = {
             }
             message2 += '[0m```';
             
-            var message3 = '```ansi\n[1;32m' + enemy[0].name + 
+            var message3 = '```ansi\n[1;32m' + enemy[0].name +
+            '\n[1;33m' + enemy[0].race +
             '\n\n[0m[4;2mSiła          [1;37m | ' + enemy[0].sila.toString().padStart(2, ' ');
             if(Object.hasOwn(enemy[0],'modifier_sila')){
                 message3 += '[1;34m ';
@@ -274,7 +285,7 @@ module.exports = {
                 if(enemy[0].modifier_fortuna > 0) message3 += '+';
                 message3 += enemy[0].modifier_fortuna;
             }
-            message3 += '\n[0m \n```';
+            message3 += '\n[0m```';
 
             var has_effects = 0;
             var message4 = '```ansi\n[1;32m' + enemy[0].name + '[0m' + '\n\n';
@@ -415,6 +426,15 @@ module.exports = {
                     message2_lines[j] += '[0m[2;37mObrażenia bez pancerza: [1;37m' + weapon[0].unarmored_damage.toString().padEnd(5, ' ');
                     j++;
                 }
+                if(weapon[0].type === 'crossbow'){
+                    message2_lines[j] += '[0m[2;37mPrzeładowana: [1;37m';
+                    if(eval('character[0].reload.' + weapon[0].name + ' < 1')) {
+                        message2_lines[j] += 'Nie            ';
+                    } else {
+                        message2_lines[j] += 'Tak            ';
+                    }
+                    j++;
+                }
                 if(weapon[0].type === 'ranged' || weapon[0].type === 'proca' || weapon[0].type === 'noze' || weapon[0].type === 'bow' || weapon[0].type === 'crossbow'){
                     message2_lines[j] += '[0m[2;37mAmunicja:                 ';
                     j++
@@ -504,7 +524,8 @@ module.exports = {
             }
             message2 += '[0m```';
     
-            var message3 = '```ansi\n[1;32m' + character[0].name + 
+            var message3 = '```ansi\n[1;32m' + character[0].name +
+            '\n[1;33m' + character[0].race +
             '\n\n[0m[4;2mSiła          [1;37m | ' + character[0].sila.toString().padStart(2, ' ');
             if(Object.hasOwn(character[0],'modifier_sila')){
                 message3 += '[1;34m ';
@@ -553,7 +574,7 @@ module.exports = {
                 if(character[0].modifier_fortuna > 0) message3 += '+';
                 message3 += character[0].modifier_fortuna;
             }
-            message3 += '\n[0m \n```';
+            message3 += '\n[0m```';
     
             var has_effects = 0;
             var message4 = '```ansi\n[1;32m' + character[0].name + '[0m' + '\n\n';

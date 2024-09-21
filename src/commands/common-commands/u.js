@@ -587,7 +587,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('ciche_stopki')
-                .setDescription('W kolorze węgla')
+                .setDescription('Trzy perliczki')
                 .addStringOption(option =>
                     option
                         .setName('imie')
@@ -904,6 +904,13 @@ module.exports = {
                 )
                 .addStringOption(option =>
                     option
+                        .setName('bron')
+                        .setDescription('broń, którą postać atakuje')
+                        .setRequired(true)
+                        .setAutocomplete(true)
+                )
+                .addStringOption(option =>
+                    option
                         .setName('cel')
                         .setDescription('Nazwa/imię celu')
                         .setRequired(true)
@@ -921,15 +928,32 @@ module.exports = {
                 )
         )
         //Miotacz
-        //Bard
         .addSubcommand(subcommand =>
             subcommand
-                .setName('drwina')
-                .setDescription('wyzwij im ojca, matkę i rodziców')
+                .setName('miotanie_nozami')
+                .setDescription('ale nie tym na gryfy')
                 .addStringOption(option =>
                     option
                         .setName('imie')
                         .setDescription('Imię postaci')
+                        .setRequired(true)
+                        .setAutocomplete(true)
+                )
+                .addNumberOption(option =>
+                    option
+                        .setName('poziom')
+                        .setDescription('poziom umiejętności')
+                        .setRequired(true)
+                        .addChoices(
+                            { name:'lvl 1', value: 1},
+                            { name:'lvl 2', value: 2},
+                            { name:'lvl 3', value: 3},
+                        )
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('bron')
+                        .setDescription('broń, którą postać atakuje')
                         .setRequired(true)
                         .setAutocomplete(true)
                 )
@@ -939,17 +963,6 @@ module.exports = {
                         .setDescription('Nazwa/imię celu')
                         .setRequired(true)
                         .setAutocomplete(true)
-                )
-                .addStringOption(option =>
-                    option
-                        .setName('statystyka')
-                        .setDescription('Statystyka wykorzystywana do ataku')
-                        .setRequired(true)
-                        .addChoices(
-                            { name: 'Retoryka', value: 'retoryka' },
-                            { name: 'Perswazja (Retoryka + Inteligencja)', value: 'perswazja' },
-                            { name: 'Zastraszanie (Retoryka + Siła)', value: 'zastraszanie' },
-                        )
                 )
                 .addNumberOption(option =>
                     option
@@ -962,6 +975,47 @@ module.exports = {
                         .setDescription('Modyfikator procentowy do progu')
                 )
         )
+        //Bard
+        // .addSubcommand(subcommand =>
+        //     subcommand
+        //         .setName('drwina')
+        //         .setDescription('wyzwij im ojca, matkę i rodziców')
+        //         .addStringOption(option =>
+        //             option
+        //                 .setName('imie')
+        //                 .setDescription('Imię postaci')
+        //                 .setRequired(true)
+        //                 .setAutocomplete(true)
+        //         )
+        //         .addStringOption(option =>
+        //             option
+        //                 .setName('cel')
+        //                 .setDescription('Nazwa/imię celu')
+        //                 .setRequired(true)
+        //                 .setAutocomplete(true)
+        //         )
+        //         .addStringOption(option =>
+        //             option
+        //                 .setName('statystyka')
+        //                 .setDescription('Statystyka wykorzystywana do ataku')
+        //                 .setRequired(true)
+        //                 .addChoices(
+        //                     { name: 'Retoryka', value: 'retoryka' },
+        //                     { name: 'Perswazja (Retoryka + Inteligencja)', value: 'perswazja' },
+        //                     { name: 'Zastraszanie (Retoryka + Siła)', value: 'zastraszanie' },
+        //                 )
+        //         )
+        //         .addNumberOption(option =>
+        //             option
+        //                 .setName('modyfikator')
+        //                 .setDescription('Modyfikator do progu')
+        //         )
+        //         .addNumberOption(option =>
+        //             option
+        //                 .setName('modyfikator_procentowy')
+        //                 .setDescription('Modyfikator procentowy do progu')
+        //         )
+        // )
         //Inne
 	,
     async autocomplete(interaction) {
@@ -977,6 +1031,9 @@ module.exports = {
                 break;
             case 'snajperski_strzal': case 'przyszpilajacy_strzal': case 'bagnet':
                 var weapon_type = 'crossbow';
+                break;
+            case 'miotanie_nozami':
+                var weapon_type = 'throwing_knifes';
                 break;
             default:
                 var weapon_type = 'none';
@@ -3356,8 +3413,6 @@ module.exports = {
                     }
                     message += '[1;32m trafienie! [1;37mObrażenia: [1;31m' + (damage) +'\n\n';
 
-                    delete enemy[0].krok_w_tyl;
-
                     message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios w [1;35mplecy'
 
                     var armor_damage = Math.ceil(damage/15);
@@ -4335,6 +4390,13 @@ module.exports = {
 
                 if(Object.hasOwn(weapon[0],'penetration')) var penetration = weapon[0].penetration;
                 else var penetration = 0;
+
+                if(eval('character[0].reload.' + weapon[0].name + ' < 1')){
+                    var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma przeładowanej broni[1;37m ' + weapon[0].display_name + '![0m\n```'
+                    interaction.editReply(message);
+                    return
+                }
+                eval('character[0].reload.' + weapon[0].name + '= 0');
                 
                 var stat_value = character[0].precyzja;
                 if(Object.hasOwn(character[0],'modifier_precyzja')){
@@ -4369,13 +4431,6 @@ module.exports = {
                     interaction.editReply(message);
                     return
                 }
-                
-                if(eval('character[0].reload.' + weapon[0].name + ' < 1')){
-                    var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma przeładowanej broni[1;37m ' + weapon[0].display_name + '![0m\n```'
-                    interaction.editReply(message);
-                    return
-                }
-                eval('character[0].reload.' + weapon[0].name + '= 0');
 
                 if(!Object.hasOwn(character[0].ammo[0],'bolts')){
                     var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma [1;37mtej amunicji![0m\n```';
@@ -4538,6 +4593,13 @@ module.exports = {
 
                 if(Object.hasOwn(weapon[0],'penetration')) var penetration = weapon[0].penetration;
                 else var penetration = 0;
+
+                if(eval('character[0].reload.' + weapon[0].name + ' < 1')){
+                    var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma przeładowanej broni[1;37m ' + weapon[0].display_name + '![0m\n```'
+                    interaction.editReply(message);
+                    return
+                }
+                eval('character[0].reload.' + weapon[0].name + '= 0');
                 
                 var stat_value = character[0].precyzja;
                 if(Object.hasOwn(character[0],'modifier_precyzja')){
@@ -4685,6 +4747,213 @@ module.exports = {
                 
                 break;
             //Miotacz
+            case 'miotanie_nozami':
+                var level = interaction.options.get('poziom').value;
+                var weapon_name = interaction.options.get('bron').value;
+                var target = interaction.options.get('cel').value;
+
+                var enemy = database.characters.filter(
+                    function(data){ return data.name.toLowerCase() == target.toLowerCase() }
+                );
+                if (enemy[0] === undefined) {
+                    var enemy = database.enemies.filter(
+                        function(data){ return data.name.toLowerCase() == target.toLowerCase() }
+                    );
+                    if (enemy[0] === undefined) {
+                        var message = '```ansi\n[1;31mBrak postaci [1;32m' + name + '[0m[1;31m w bazie[0m\n```'
+                        await interaction.editReply(message);
+                        return
+                    }
+                }
+                if(character[0].team != enemy[0].team){
+                    var message = '```ansi\n[1;31mPostać i cel muszą być w tej samej drużynie[0m\n```'
+                    await interaction.editReply(message);
+                    return
+                }
+
+                if(Object.hasOwn(character[0],'sokole_oko') && interaction.options.get('czesc')){
+                    var body_part = interaction.options.get('czesc').value;
+                    delete character[0].sokole_oko;
+                }
+                else var body_part = enemy[0].body_parts[globals.getRandomInt(enemy[0].body_parts.length) - 1];
+
+                var weapon = weapons.filter(
+                    function(data){ return data.display_name.toLowerCase() == weapon_name.toLowerCase() }
+                );
+                if (weapon[0] === undefined) {
+                    var message = '```ansi\n[1;31mBrak broni [1;35m' + weapon_name + '[0m[1;31m w bazie[0m\n```'
+                    await interaction.editReply(message);
+                    return
+                }
+
+                var weapon_dmg = weapon[0].damage;
+
+                if(Object.hasOwn(weapon[0],'bleed')) var bleed = weapon[0].bleed;
+                else var bleed = 0;
+
+                if(eval('enemy[0].' + body_part + '=== 0')){
+                    if(Object.hasOwn(weapon[0],'unarmored_damage')) weapon_dmg = weapon[0].unarmored_damage;
+                    if(Object.hasOwn(weapon[0],'unarmored_bleed')) bleed = weapon[0].unarmored_bleed;   
+                }
+
+                if(Object.hasOwn(weapon[0],'penetration')) var penetration = weapon[0].penetration;
+                else var penetration = 0;
+
+                var stat_value = character[0].precyzja;
+                if(Object.hasOwn(character[0],'modifier_precyzja')){
+                    stat_value += character[0].modifier_precyzja;
+                }
+                if(Object.hasOwn(character[0],"sokole_oko")){
+                    stat_value = Math.ceil(stat_value*character[0].sokole_oko);
+                }
+                if(interaction.options.get('modyfikator')){
+                    var modifier = interaction.options.get('modyfikator').value;
+                    stat_value += modifier;
+                }
+                if(interaction.options.get('modyfikator_procentowy')){
+                    var percentage_modifier = interaction.options.get('modyfikator_procentowy').value;
+                    stat_value = Math.ceil(stat_value * (1 + percentage_modifier/100));
+                }
+                if(Object.hasOwn(character[0],'kac')){
+                    stat_value -= character[0].kac;
+                }
+
+                switch(level){
+                    case 1:
+                        var energy_cost = 4;
+                        stat_value = Math.ceil(stat_value*1.25);
+                        break;
+                    case 2:
+                        var energy_cost = 6;
+                        stat_value = Math.ceil(stat_value*1.5);
+                        break;
+                    case 3:
+                        var energy_cost = 8;
+                        stat_value = Math.ceil(stat_value*1.75);
+                        break;
+                }
+
+                if(character[0].energy < energy_cost){
+                    var message = '```ansi\n[1;32m' + character[0].name + '[1;31m ma za mało [1;36mkondycji[1;37m![0m\n```'
+                    interaction.editReply(message);
+                    return
+                }
+                if(!Object.hasOwn(character[0].ammo[0],'throwing_knifes')){
+                    var message = '```ansi\n[1;32m' + character[0].name + '[1;31m nie ma [1;37mtej amunicji![0m\n```';
+                    await interaction.editReply(message);
+                    return;
+                }
+                character[0].energy -= energy_cost;
+                character[0].ammo[0].throwing_knifes -= 1;
+                if (character[0].ammo[0].throwing_knifes < 1){
+                    delete character[0].ammo[0].throwing_knifes;
+                }
+                if(Object.hasOwn(character[0],'krok_w_tyl')) delete character[0].krok_w_tyl;
+
+                switch (character[0].rank){
+                    case 'dziecko':
+                        var dice = 15;
+                        break;
+                    case 'rekrut':
+                        var dice = 20;
+                        break;
+                    case 'm-straznik':
+                        var dice = 30;
+                        break;
+                    case 'straznik':
+                        var dice = 40;
+                        break;
+                    case 's-straznik':
+                        var dice = 50;
+                        break;
+                    case 'czempion':
+                        var dice = 60;
+                        break;
+                }
+                var roll = globals.getRandomInt(dice);
+                var damage = stat_value - roll + weapon_dmg;
+
+                var message = '```ansi\n[1;32m' + character[0].name + '[1;37m Miotanie nożami lvl ' + level + '\n[1;36mKondycja ' + character[0].energy + '/' + character[0].max_energy +
+                '[1;37m Wynik rzutu: [[1;34m' + roll + '[1;37m] Próg: ' + stat_value;
+
+                if(roll === dice){
+                    message += '[1;31m Krytyczna porażka!';
+                }
+                else if(roll > stat_value && roll != 1){
+                    message += '[1;31m Porażka!';
+                }
+                else {
+                    if (roll === 1){
+                        message += '[1;31m krytyczne'
+                        damage *= 2;
+                    }
+                    message += '[1;32m trafienie! [1;37mObrażenia: [1;31m' + damage +'\n\n';
+
+                    switch(body_part) {
+                        case 'glowa':
+                            message += '[1;32m' + enemy[0].name + '[1;37m dostaje buzi w [1;35mczółko'
+                            break;
+                        case 'korpus':
+                            message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios na [1;35mkorpus'
+                            break;
+                        case 'lewa_reka':
+                            message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios na [1;35mlewą rękę'
+                            break;
+                        case 'prawa_reka':
+                            message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios na [1;35mprawą rękę'
+                            break;
+                        case 'lewa_noga':
+                            message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios na [1;35mlewą nogę'
+                            break;
+                        case 'prawa_noga':
+                            message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios na [1;35mprawą nogę'
+                            break;
+                        default:
+                            message += '[1;32m' + enemy[0].name + '[1;37m otrzymuje cios na [1;35m' + body_part;
+                            break;
+                    }
+
+                    var armor_damage = Math.ceil(damage/15);
+    
+                    var old_armor_value =  enemy[0].korpus;
+    
+                    for(let i = 0; i < armor_damage; i += 1){
+                        if(enemy[0].korpus > 0){
+                            enemy[0].korpus -= 1;
+                            damage -= 15;
+                        }
+                        else {
+                            enemy[0].hp -= damage;
+                            enemy[0].hp = Math.max(0, enemy[0].hp);
+                            break;
+                        }
+                    }
+                    damage = Math.max(0, damage);
+                    
+                    enemy[0].hp -= penetration;
+                    enemy[0].hp = Math.max(0, enemy[0].hp);
+    
+                    message += '[1;35m PT: ' + old_armor_value + '[1;37m => [1;35m';
+                    message += enemy[0].korpus;
+                    message += '\n[1;37mObrazenia na postać: [1;31m' + (damage + penetration);
+                    if(bleed > 0){
+                        if(Object.hasOwn(enemy[0],'bleeding')){
+                            enemy[0].bleeding = Math.max(bleed,enemy[0].bleeding);
+                        }else{
+                            enemy[0].bleeding = bleed;
+                        }
+                        message += '[1;31m krwawienie: ' + enemy[0].bleeding;
+                    }
+
+                    message += '\nPZ: ' + enemy[0].hp + '/' + enemy[0].max_hp;
+                    
+                    if(Object.hasOwn(character[0].ammo[0],'throwing_knifes')) message += '\n[1;37mNoże: ' + character[0].ammo[0].throwing_knifes;
+                    else message += '\n[1;37mKoniec noży';
+
+                }
+                message += '\n```';
+
+                break;
             //Bard
             /*TODO*/case 'drwina':
                 var level = interaction.options.get('poziom').value;

@@ -175,6 +175,9 @@ module.exports = {
                 return
             }
         }
+        var team = database.teams.filter(
+            function(data){ return data.name.toLowerCase() == character[0].team.toLowerCase() }
+        );
         var weapon = weapons.filter(
             function(data){ return data.display_name.toLowerCase() == weapon_name.toLowerCase() }
         );
@@ -348,11 +351,18 @@ module.exports = {
 
         if(roll === dice){
             message += '[1;31m Krytyczna porażka!';
+            var success = false;
+            var old_armor_value = 0;
+            var bleed_change = 0;
         }
         else if(roll > stat_value && roll != 1){
             message += '[1;31m Porażka!';
+            var success = false;
+            var old_armor_value = 0;
+            var bleed_change = 0;
         }
         else{
+            var success = true;
             var damage = stat_value - roll + weapon_dmg;
             if (roll === 1){
                 message += ' krytyczne'
@@ -392,7 +402,8 @@ module.exports = {
                     }
                     var armor_damage = Math.ceil(damage/15);
     
-                    eval('var old_armor_value =  enemy[0].' + body_part)
+                    eval('var old_armor_value =  enemy[0].' + body_part);
+                    var old_hp = enemy[0].hp;
     
                     for(let i = 0; i < armor_damage; i += 1){
                         if(eval('enemy[0].' + body_part + '> 0')){
@@ -415,17 +426,35 @@ module.exports = {
                     message += '\n[1;37mObrazenia na postać: [1;31m' + (damage + penetration);
                     if(bleed > 0){
                         if(Object.hasOwn(enemy[0],'bleeding')){
+                            var bleed_change = Math.max(bleed - enemy[0].bleeding, 0);
                             enemy[0].bleeding = Math.max(bleed,enemy[0].bleeding);
                         }else{
+                            var bleed_change = bleed;
                             enemy[0].bleeding = bleed;
                         }
                         message += '[1;31m krwawienie: ' + enemy[0].bleeding;
+                    }
+                    else{
+                        var bleed_change = 0;
                     }
 
                     message += '\nPZ: ' + enemy[0].hp + '/' + enemy[0].max_hp;
                     break;
             }
         }
+        team[0].last_action = {
+            name: character[0].name,
+            action: "atak_zasiegowy",
+            success: success,
+            energy_cost: 2,
+            ammo: ammo_type,
+            target: enemy[0].name,
+            damage: Math.min(damage + penetration, old_hp),
+            body_part: body_part,
+            armor_damage: eval('old_armor_value - enemy[0].' + body_part),
+            bleed: bleed_change,
+        }
+        if (weapon[0].type = 'crossbow') team[0].last_action.reload = weapon[0].name;
 
         message += '[0m\n```'
 		globals.SaveFile(JSON.stringify(database));

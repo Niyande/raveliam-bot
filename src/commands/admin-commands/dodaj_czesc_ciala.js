@@ -67,9 +67,11 @@ module.exports = {
         if (interaction.options.get('pt')){
             var pt = interaction.options.get('pt').value;
             eval('enemy[0].' + body_part + '= pt');
+            eval('enemy[0].max_' + body_part + '= pt');
         }
         else{
             eval('enemy[0].' + body_part + '= 0');
+            eval('enemy[0].max_' + body_part + '= 0');
         }
         globals.SaveFile(JSON.stringify(database));
 

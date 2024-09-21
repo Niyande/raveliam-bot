@@ -5,7 +5,7 @@ const path = require('node:path');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('zmien_zbroje')
-		.setDescription('Zmień liczbę PT zbroji')
+		.setDescription('Zmień obecną liczbę PT zbroji')
 		.addStringOption(option =>
             option
                 .setName('imie')

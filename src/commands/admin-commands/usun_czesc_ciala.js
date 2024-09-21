@@ -59,7 +59,8 @@ module.exports = {
             return
         }
 
-        eval('delete enemy[0].' + body_part)
+        eval('delete enemy[0].' + body_part);
+        eval('delete enemy[0].max_' + body_part);
         enemy[0].body_parts.splice(enemy[0].body_parts.indexOf(body_part), 1);
 
         var message = '```ansi\n[1;32m' + enemy[0].name + '[1;37m traci ' + body_part + '\n```';

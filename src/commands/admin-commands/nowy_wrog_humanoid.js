@@ -26,6 +26,23 @@ module.exports = {
                     { name: 'Dziecko', value: 'dziecko'},
                 )
         )
+        .addStringOption(option =>
+            option
+                .setName('rasa')
+                .setDescription('Rasa postaci')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'Człowiek', value: 'Człowiek' },
+                    { name: 'Krasnolud', value: 'Krasnolud' },
+                    { name: 'Elf miejski', value: 'Elf miejski' },
+                    { name: 'Elf wysoki', value: 'Elf wysoki' },
+                    { name: 'Elf leśny', value: 'Elf leśny' },
+                    { name: 'Ketanin', value: 'Ketanin'},
+                    { name: 'Goblin', value: 'Goblin'},
+                    { name: 'Drakendar', value: 'Drakendar'},
+                    { name: 'Specjalna', value: 'Specjalna'},
+                )
+        )
         .addNumberOption(option =>
             option
                 .setName('sila')
@@ -119,6 +136,7 @@ module.exports = {
 
         var name = interaction.options.get('nazwa').value;
         var rank = interaction.options.get('ranga').value;
+        var race = interaction.options.get('rasa').value;
         var sila = interaction.options.get('sila').value;
         var zrecznosc = interaction.options.get('zrecznosc').value;
         var precyzja = interaction.options.get('precyzja').value;
@@ -146,6 +164,7 @@ module.exports = {
             database.enemies.push({
                 name: name,
                 rank: rank,
+                race: race,
 
                 sila: sila,
                 zrecznosc: zrecznosc,
@@ -169,6 +188,13 @@ module.exports = {
                 korpus: korpus,
                 lewa_noga: lewa_noga,
                 prawa_noga: prawa_noga,
+
+                max_glowa: glowa,
+                max_lewa_reka: lewa_reka,
+                max_prawa_reka: prawa_reka,
+                max_korpus: korpus,
+                max_lewa_noga: lewa_noga,
+                max_prawa_noga: prawa_noga,
 
                 body_parts: ['glowa', 'lewa_reka', 'prawa_reka', 'korpus', 'lewa_noga', 'prawa_noga'],
                 weapons: [],

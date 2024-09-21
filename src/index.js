@@ -181,6 +181,10 @@ client.on('messageCreate', (message) =>{
         var imgPath = path.join(__dirname, '..', 'images', 'yors.gif');
         message.reply({ files: [imgPath] });
     }
+    if (message.content.toLowerCase().includes('essa')) {
+        var imgPath = path.join(__dirname, '..', 'images', 'essa.png');
+        message.reply({ files: [imgPath] });
+    }
 });
 
 client.login(token);
