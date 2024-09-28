@@ -22,7 +22,6 @@ module.exports = {
         )
 	,
     async autocomplete(interaction) {
-        await interaction.deferReply();
 		const focusedOption = interaction.options.getFocused(true);
         var database = globals.ReadDatabase();
         var weapons = globals.ReadWeaponDatabase().weapons;
@@ -53,6 +52,7 @@ module.exports = {
 		);
 	},
 	async execute(interaction) {
+        await interaction.deferReply();
         if (!interaction.member.roles.cache.some(role => role.name === 'Konserwator 🤖')) {
             var imgPath = path.join(__dirname, '..', '..', '..', 'images', 'ken-you-not.png');
             await interaction.editReply({ files: [imgPath] });

@@ -150,11 +150,7 @@ module.exports = {
             }
             
         }
-        if(Object.hasOwn(character[0],'kac')){
-            stat_value -= character[0].kac;
-        }
-
-        var roll = globals.getRandomInt(dice);
+        
 
         if(interaction.options.get('modyfikator')){
             var modifier = interaction.options.get('modyfikator').value;
@@ -169,6 +165,12 @@ module.exports = {
             stat_value = Math.ceil(stat_value*character[0].sokole_oko);
             delete character[0].sokole_oko;
         }
+        
+        if(Object.hasOwn(character[0],'kac')){
+            stat_value -= character[0].kac;
+        }
+
+        var roll = globals.getRandomInt(dice);
 
         
         

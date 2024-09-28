@@ -2503,91 +2503,93 @@ module.exports = {
                 else{
                     message += '[1;31m Porażka!';
                 }
-                if(Object.hasOwn(enemy[0],'riposta')){
-                    if(enemy[0].riposta < 6){
-                        var enemy_weapon_name = enemy[0].weapons[0];
-                        if(enemy_weapon_name === undefined){
-                            message += '\n\n[1;32m' + enemy[0].name + '[1;37m nie może wykonać [1;34mriposty[1;37m, ponieważ nie ma broni';
-                        }
-                        else{
-                            var riposte_body_part = character[0].body_parts[globals.getRandomInt(character[0].body_parts.length) - 1];
-                            var enemy_weapon = weapons.filter(
-                                function(data){ return data.name.toLowerCase() == enemy_weapon_name.toLowerCase() }
-                            );
-                            if(Object.hasOwn(enemy_weapon[0],'penetration')) var enemy_penetration = enemy_weapon[0].penetration;
-                            else var enemy_penetration = 0;
-        
-                            if(Object.hasOwn(enemy_weapon[0],'bleed')) var enemy_bleed = enemy_weapon[0].bleed;
-                            else var enemy_bleed = 0;
-        
-                            var enemy_weapon_dmg = enemy_weapon[0].damage;
-        
-                            if(eval('character[0].' + riposte_body_part + '=== 0')){
-                                if(Object.hasOwn(enemy_weapon[0],'unarmored_damage')) enemy_weapon_dmg = enemy_weapon[0].unarmored_damage;
-                                if(Object.hasOwn(enemy_weapon[0],'unarmored_bleed')) enemy_bleed = enemy_weapon[0].unarmored_bleed;
+                if(interaction.options.get('cel')){
+                    if(Object.hasOwn(enemy[0],'riposta')){
+                        if(enemy[0].riposta < 6){
+                            var enemy_weapon_name = enemy[0].weapons[0];
+                            if(enemy_weapon_name === undefined){
+                                message += '\n\n[1;32m' + enemy[0].name + '[1;37m nie może wykonać [1;34mriposty[1;37m, ponieważ nie ma broni';
                             }
-        
-                            message += '\n\n[1;32m' + enemy[0].name + '[1;37m wykonuje [1;34mripostę[1;37m. Obrażenia: [1;31m' + enemy_weapon_dmg + '\n\n';
-                            
-                            switch(riposte_body_part) {
-                                case 'glowa':
-                                    message += '[1;32m' + character[0].name + '[1;37m dostaje buzi w [1;35mczółko'
-                                    break;
-                                case 'korpus':
-                                    message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mkorpus'
-                                    break;
-                                case 'lewa_reka':
-                                    message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mlewą rękę'
-                                    break;
-                                case 'prawa_reka':
-                                    message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mprawą rękę'
-                                    break;
-                                case 'lewa_noga':
-                                    message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mlewą nogę'
-                                    break;
-                                case 'prawa_noga':
-                                    message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mprawą nogę'
-                                    break;
-                                default:
-                                    message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35m' + riposte_body_part;
-                                    break;
-                            }
-        
-                            var riposte_armor_damage = Math.ceil(enemy_weapon_dmg/15);
-        
-                            eval('var riposte_old_armor_value =  character[0].' + riposte_body_part)
+                            else{
+                                var riposte_body_part = character[0].body_parts[globals.getRandomInt(character[0].body_parts.length) - 1];
+                                var enemy_weapon = weapons.filter(
+                                    function(data){ return data.name.toLowerCase() == enemy_weapon_name.toLowerCase() }
+                                );
+                                if(Object.hasOwn(enemy_weapon[0],'penetration')) var enemy_penetration = enemy_weapon[0].penetration;
+                                else var enemy_penetration = 0;
             
-                            for(let i = 0; i < riposte_armor_damage; i += 1){
-                                if(eval('character[0].' + riposte_body_part + '> 0')){
-                                    eval('character[0].' + riposte_body_part + '-= 1');
-                                    enemy_weapon_dmg -= 15;
-                                }
-                                else {
-                                    character[0].hp -= enemy_weapon_dmg;
-                                    character[0].hp = Math.max(0, character[0].hp);
-                                    break;
-                                }
-                            }
-                            enemy_weapon_dmg = Math.max(0, enemy_weapon_dmg);
-                            
-                            character[0].hp -= enemy_penetration;
-                            character[0].hp = Math.max(0, character[0].hp);
+                                if(Object.hasOwn(enemy_weapon[0],'bleed')) var enemy_bleed = enemy_weapon[0].bleed;
+                                else var enemy_bleed = 0;
             
-                            message += '[1;35m PT: ' + riposte_old_armor_value + '[1;37m => [1;35m';
-                            eval('message += character[0].' + riposte_body_part);
-                            message += '\n[1;37mObrazenia na postać: [1;31m' + (enemy_weapon_dmg + enemy_penetration);
-                            if(enemy_bleed > 0){
-                                if(Object.hasOwn(character[0],'bleeding')){
-                                    character[0].bleeding = Math.max(enemy_bleed, character[0].bleeding);
-                                }else{
-                                    character[0].bleeding = enemy_bleed;
+                                var enemy_weapon_dmg = enemy_weapon[0].damage;
+            
+                                if(eval('character[0].' + riposte_body_part + '=== 0')){
+                                    if(Object.hasOwn(enemy_weapon[0],'unarmored_damage')) enemy_weapon_dmg = enemy_weapon[0].unarmored_damage;
+                                    if(Object.hasOwn(enemy_weapon[0],'unarmored_bleed')) enemy_bleed = enemy_weapon[0].unarmored_bleed;
                                 }
-                                message += '[1;31m krwawienie: ' + character[0].bleeding;
+            
+                                message += '\n\n[1;32m' + enemy[0].name + '[1;37m wykonuje [1;34mripostę[1;37m. Obrażenia: [1;31m' + enemy_weapon_dmg + '\n\n';
+                                
+                                switch(riposte_body_part) {
+                                    case 'glowa':
+                                        message += '[1;32m' + character[0].name + '[1;37m dostaje buzi w [1;35mczółko'
+                                        break;
+                                    case 'korpus':
+                                        message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mkorpus'
+                                        break;
+                                    case 'lewa_reka':
+                                        message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mlewą rękę'
+                                        break;
+                                    case 'prawa_reka':
+                                        message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mprawą rękę'
+                                        break;
+                                    case 'lewa_noga':
+                                        message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mlewą nogę'
+                                        break;
+                                    case 'prawa_noga':
+                                        message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35mprawą nogę'
+                                        break;
+                                    default:
+                                        message += '[1;32m' + character[0].name + '[1;37m otrzymuje cios na [1;35m' + riposte_body_part;
+                                        break;
+                                }
+            
+                                var riposte_armor_damage = Math.ceil(enemy_weapon_dmg/15);
+            
+                                eval('var riposte_old_armor_value =  character[0].' + riposte_body_part)
+                
+                                for(let i = 0; i < riposte_armor_damage; i += 1){
+                                    if(eval('character[0].' + riposte_body_part + '> 0')){
+                                        eval('character[0].' + riposte_body_part + '-= 1');
+                                        enemy_weapon_dmg -= 15;
+                                    }
+                                    else {
+                                        character[0].hp -= enemy_weapon_dmg;
+                                        character[0].hp = Math.max(0, character[0].hp);
+                                        break;
+                                    }
+                                }
+                                enemy_weapon_dmg = Math.max(0, enemy_weapon_dmg);
+                                
+                                character[0].hp -= enemy_penetration;
+                                character[0].hp = Math.max(0, character[0].hp);
+                
+                                message += '[1;35m PT: ' + riposte_old_armor_value + '[1;37m => [1;35m';
+                                eval('message += character[0].' + riposte_body_part);
+                                message += '\n[1;37mObrazenia na postać: [1;31m' + (enemy_weapon_dmg + enemy_penetration);
+                                if(enemy_bleed > 0){
+                                    if(Object.hasOwn(character[0],'bleeding')){
+                                        character[0].bleeding = Math.max(enemy_bleed, character[0].bleeding);
+                                    }else{
+                                        character[0].bleeding = enemy_bleed;
+                                    }
+                                    message += '[1;31m krwawienie: ' + character[0].bleeding;
+                                }
+            
+                                message += '\nPZ: ' + character[0].hp + '/' + character[0].max_hp;
                             }
-        
-                            message += '\nPZ: ' + character[0].hp + '/' + character[0].max_hp;
+                            
                         }
-                        
                     }
                 }
                 message += '[0m\n```';
