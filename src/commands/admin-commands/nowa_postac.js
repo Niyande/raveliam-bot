@@ -199,7 +199,8 @@ module.exports = {
                 body_parts: ['glowa', 'lewa_reka', 'prawa_reka', 'korpus', 'lewa_noga', 'prawa_noga'],
                 weapons: [],
                 ammo: [{}],
-                ready: {}
+                ready: {},
+                reload: {}
             });
             globals.SaveFile(JSON.stringify(database));
             switch (rank){

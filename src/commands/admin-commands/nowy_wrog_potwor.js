@@ -124,7 +124,8 @@ module.exports = {
                 body_parts:[],
                 weapons: [],
                 ammo: [{}],
-                ready: {}
+                ready: {},
+                reload: {}
             });
             globals.SaveFile(JSON.stringify(database));
             switch (rank){

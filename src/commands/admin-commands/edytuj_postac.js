@@ -84,6 +84,35 @@ module.exports = {
                         )
                 )
         )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('zmien_rase')
+                .setDescription('Zmień rasę poostaci')
+                .addStringOption(option =>
+                    option
+                        .setName('imie')
+                        .setDescription('Imię postaci')
+                        .setRequired(true)
+                        .setAutocomplete(true)
+                )
+                .addStringOption(option =>
+                    option
+                        .setName('nowa_rasa')
+                        .setDescription('Nowa rasa postaci')
+                        .setRequired(true)
+                        .addChoices(
+                            { name: 'Człowiek', value: 'Człowiek' },
+                            { name: 'Krasnolud', value: 'Krasnolud' },
+                            { name: 'Elf miejski', value: 'Elf miejski' },
+                            { name: 'Elf wysoki', value: 'Elf wysoki' },
+                            { name: 'Elf leśny', value: 'Elf leśny' },
+                            { name: 'Ketanin', value: 'Ketanin'},
+                            { name: 'Goblin', value: 'Goblin'},
+                            { name: 'Drakendar', value: 'Drakendar'},
+                            { name: 'Specjalna', value: 'Specjalna'},
+                        )
+                )
+        )
     ,
     async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
@@ -148,7 +177,7 @@ module.exports = {
 
                 break;
             case 'zmien_imie':
-                var new_name = interaction.options.get('nowe_imie').value;                
+                var new_name = interaction.options.get('nowe_imie').value;
                 character[0].name = new_name;
 
                 var message = '```ansi\n[1;37mZmieniono imię [1;32m' + name + '[1;37m na [1;32m' + new_name + '[0m\n```';
@@ -199,6 +228,12 @@ module.exports = {
                 character[0].rank = new_rank;
                 var message = '```ansi\n[1;37mZmieniono rangę [1;32m' + name + '[1;37m z [1;33m' + old_rank + '[1;37m na [1;33m' + new_rank_display + '[0m\n```';
                 
+                break;
+            case 'zmien_rase':
+                var new_race = interaction.options.get('nowa_rasa').value;
+                character[0].race = new_race;
+
+                var message = '```ansi\n[1;37mZmieniono rasę [1;32m' + name + '[1;37m na [1;32m' + new_race + '[0m\n```';
                 break;
         }
 
